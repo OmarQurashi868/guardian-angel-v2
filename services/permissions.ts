@@ -58,18 +58,21 @@ export async function requestMicrophonePermission(): Promise<boolean> {
 	try {
 		console.log('[Permissions] Requesting microphone permission...');
 
-		// Use React Native's PermissionsAndroid for Android (works in Expo Go)
+		// Use React Native's PermissionsAndroid for Android (native Android dialog)
 		if (Platform.OS === 'android') {
 			try {
+				// Check if already granted
+				const checkResult = await PermissionsAndroid.check(
+					PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+				);
+				if (checkResult) {
+					console.log('[Permissions] Microphone permission already granted');
+					return true;
+				}
+
+				// Request permission - native Android dialog only, no custom messages
 				const granted = await PermissionsAndroid.request(
 					PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-					{
-						title: 'Microphone Permission',
-						message: 'This app needs access to your microphone to enable voice streaming.',
-						buttonNeutral: 'Ask Me Later',
-						buttonNegative: 'Cancel',
-						buttonPositive: 'OK',
-					},
 				);
 				const isGranted = granted === PermissionsAndroid.RESULTS.GRANTED;
 				console.log(

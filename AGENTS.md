@@ -140,4 +140,7 @@ export default function MainComponent() {
 ```
 
 ## FILES
-Use different files for different services/modules for organization
+- Use different files for different services/modules for organization
+
+## Addendum
+- Don't include in-app permission popups, only native android ones
